@@ -1,0 +1,11 @@
+a:link,
+a:visited,
+a:active,
+a:hover {
+  text-decoration: none;
+  color: #28248f;
+}
+
+.grey {
+  color: #8785ad;
+}

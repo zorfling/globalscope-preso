@@ -1,0 +1,652 @@
+import { themes } from 'mdx-deck';
+import { LiveCode } from 'mdx-deck-live-code';
+
+import myThemes from './theme';
+import myPrismTheme from './prism-theme';
+
+import './styles.css';
+
+export const theme = {
+  ...myThemes,
+  ...myPrismTheme,
+};
+
+<Header>
+  Global Scope 2021 Recap - 8 hours of JavaScript talks in 30 minutes
+</Header>
+<Footer>
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div>Chris Colborne - August 2021</div>
+    <div>@zorfling</div>
+  </div>
+</Footer>
+
+# Global Scope 2021
+
+## 8 hours of JavaScript talks in 30 minutes
+
+### Chris Colborne - August 2021
+
+[@zorfling](https://twitter.com/zorfling)
+
+---
+
+## What is Global Scope?
+
+Third of 6 Web Directions conferences this year
+
+Entirely online over two consecutive Fridays
+
+Other conferences this year:
+
+- ✔️[hover conf](https://webdirections.org/hover) - CSS
+- ✔️[lazy load](https://webdirections.org/lazyload) - Front end Performance
+- ✔️[global scope](https://webdirections.org/globalscope) - JavaScript
+- [code](https://webdirections.org/code) - PWAs & The Web Platform
+- [access all areas](https://webdirections.org/aaa) - Accessibility
+- [safe](https://webdirections.org/safe) - Security, Privacy, Identity
+
+---
+
+## What is Global Scope about?
+
+13 talks, all about JavaScript
+
+- Fully Scripted<span className="grey"> - Tim Kadlec</span>
+- Temporal: Modern dates and times in JavaScript<span className="grey"> - Philip Chimento</span>
+- Optional Chaining and Null Coalescing, a Golden Duo<span className="grey"> - Bramus Van Damme</span>
+- JavaScript apps go Int(ernationa)l<span className="grey"> - Phil Nash</span>
+- Record & Tuple: immutable data structures in JS<span className="grey"> - Robin Ricard</span>
+- Class features implementation in JSC<span className="grey"> - Caio Lima</span>
+- Principles of Just-In-Time compilers.<span className="grey"> - Nicolas B. Pierron</span>
+- Specifying JavaScript<span className="grey"> - Yulia Startsev</span>
+- Rethinking the JavaScript ternary operator<span className="grey"> - James Sinclair</span>
+- Asynchronous Iterators and Generators<span className="grey"> - Lydia Hallie</span>
+- Rethinking JavaScript with Generator Functions<span className="grey"> - Patrick Smith</span>
+- The Realms (API) of JavaScript<span className="grey"> - Leo Balter</span>
+- The Third Age of JavaScript<span className="grey"> - Shawn Swyx Wang</span>
+
+---
+
+## Fully Scripted
+
+### Tim Kadlec, Performance Engineering Fellow, Catchpoint
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/tim-kadlec.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+Accessibility, heavy bundle sizes etc
+
+Be stubborn for the users!
+
+---
+
+### Resources
+
+- [@tkadlec on Twitter](https://twitter.com/tkadlec)
+
+---
+
+## Temporal: Modern dates and times in JavaScript
+
+### Philip Chimento, Developer, Igalia
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/philip-chimento.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+Date is based on Java - was replaced in 1.1
+
+Temporal is stage 3
+
+Immutable
+
+Strongly Typed
+
+---
+
+Exact - Instant
+
+Plain Types - Date, Time, YearMonth, MonthDay
+
+ZonedDateTime - Instant but with timezone, includes daylight savings etc
+
+Duration
+
+TimeZone
+
+Calendar
+
+---
+
+## Three Demos
+
+## Unix Timestamp (Easy)
+
+`Temporal.Now.instant().epochMilliseconds`
+
+## What is the date, one month from today? (Medium)
+
+```js
+const calendar = ... // choose the appropriate calendar
+const date = Temporal.Now.plainDate(calendar);
+console.log(date.add({ months: 1 }).toLocaleString());
+```
+
+---
+
+## What time is Global Scope for me? (Complicated)
+
+```js
+const myCoffeeTime = Temporal.PlainTime.from('08:00');
+const myBedtime = Temporal.PlainTime.from('23:00');
+
+function iCanBeOnlineAt(time) {
+  return (
+    Temporal.PlainTime.compare(myCoffeeTime, time) <= 0 &&
+    Temporal.PlainTime.compare(time, myBedtime) <= 0
+  );
+}
+
+const formatter = new Intl.DateTimeFormat(/* your preferred format here */);
+console.log('Put Global Scope in your calendar:');
+dates.forEach((date) => {
+  sessions.forEach(({ timeZone, hour }) => {
+    const sessionStart = date.toZonedDateTime({
+      timeZone,
+      plainTime: { hour },
+    });
+    const mySessionStart = sessionStart.withTimeZone(myTimeZone);
+    const mySessionEnd = mySessionStart.add(sessionLength);
+    if (iCanBeOnlineAt(mySessionStart) && iCanBeOnlineAt(mySessionEnd)) {
+      console.log(
+        formatter.formatRange(
+          mySessionStart.toPlainDateTime(),
+          mySessionEnd.toPlainDateTime()
+        )
+      );
+    }
+  });
+});
+```
+
+---
+
+## Testing
+
+Now is designed to be replaceable so you can do
+
+```js
+Temporal.Now = {
+  /*...your mock object...*/
+};
+```
+
+---
+
+### Resources
+
+- https://tc39.es/proposal-temporal/docs/
+- https://yourcalendricalfallacyis.com/
+- [@therealptomato on Twitter](https://twitter.com/therealptomato)
+
+---
+
+## Optional Chaining and Null Coalescing, a Golden Duo
+
+### Bramus Van Damme, Freelance Frontend Developer
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/bramus-van-damme.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+## Notes
+
+ES2020
+
+## Optional Chaining
+
+```js
+// The Problem
+console.log(message.meta.publicationDate || (new Date()).toISOString());
+//~> ❌ “Cannot read property 'publicationDate' of undefined”
+
+// A hacky workaround
+const title = message && message.meta && message.meta.publicationDate || (...);
+
+// Another hacky workaround
+const title = (((message || {}).meta || {}).publicationDate || (...);
+
+// The Non-Hacky Solution: The Optional Chaining Operator ?.
+const title = message?.meta?.publicationDate || (new Date()).toISOString();
+//~> "2021-07-23T15:08:12.633Z"
+```
+
+---
+
+It is spelled ?. so you can also do Functions
+
+```js
+// optional static property access
+obj?.prop;
+
+// optional dynamic property access
+obj?.[expr];
+
+// optional function or method call
+func?.(...args);
+```
+
+---
+
+## Null Coalescing Operator
+
+Equality agains nullary values (null or undefined)
+
+---
+
+### Resources
+
+- [Slides - Optional Chaining](https://brm.us/esnext-optional-chaining)
+- [Slides - Null Coalescing](https://brm.us/esnext-null-coalescing)
+- [@bramus on Twitter](https://twitter.com/bramus)
+
+---
+
+## JavaScript apps go Int(ernationa)l
+
+### Phil Nash, Developer Evangelist, Twilio
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/phil-nash.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+## Notes
+
+Events - online has made them hard
+
+Displaying a time online requires a lot more context
+
+Intl - Building blocks
+
+---
+
+## Intl
+
+Intl.DateTimeFormat
+
+```js
+const date = new Date('2021-08-06T03:00:00.000Z');
+new Intl.DateTimeFormat().format(date);
+new Intl.DateTimeFormat().resolvedOptions();
+
+new Intl.DateTimeFormat('en-GB', {
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+}).format(date);
+```
+
+---
+
+## Intl.RelativeTimeFormat
+
+```js
+new Intl.RelativeTimeFormat('en-AU').format(3, 'hours');
+new Intl.RelativeTimeFormat('fr').format(3, 'hours');
+new Intl.RelativeTimeFormat('en-AU').format(-3, 'hours');
+new Intl.RelativeTimeFormat('en-AU').format(-1, 'days');
+new Intl.RelativeTimeFormat('en-AU', { numeric: 'auto' }).format(-1, 'days');
+```
+
+---
+
+## Plurals
+
+Rules not formatters
+
+Cardinals and Ordinals
+
+1/2/3/4
+1st/2nd/3rd/4th
+
+Intl.PluralRules
+
+```js
+new Intl.PluralRules('en');
+
+new Intl.PluralRules('en').select(1); // one
+new Intl.PluralRules('en').select(2); // other
+
+// Welsh
+new Intl.PluralRules('cy').select(1); // 6 different zero, one, two, few, many, other
+```
+
+Ordinals
+
+```js
+new Intl.PluralRules('en', { type: 'ordinals' }).select(1); // one
+```
+
+---
+
+## Formatting Numbers
+
+Intl.NumberFormat
+
+```js
+new Intl.NumberFormat('en-AU').format(1234567.89);
+new Intl.NumberFormat('en-IN').format(1234567.89);
+new Intl.NumberFormat('de').format(1234567.89);
+new Intl.NumberFormat('fr').format(1234567.89);
+```
+
+---
+
+## Money
+
+```js
+new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(
+  9.99
+);
+new Intl.NumberFormat('en', { style: 'currency', currency: 'AUD' }).format(
+  9.99
+);
+new Intl.NumberFormat('fr', { style: 'currency', currency: 'AUD' }).format(
+  9.99
+);
+new Intl.NumberFormat('de', { style: 'currency', currency: 'AUD' }).format(
+  9.99
+);
+```
+
+---
+
+## Units - check again
+
+---
+
+## Time Formatter Web Component
+
+```html
+<time-formatter datetime="2021-04-29">Somethign</time-formatter>
+```
+
+philnash/timeformatter
+
+github/time-elements
+
+---
+
+### Resources
+
+- [Intl Stages](https://github.com/tc39/proposals/blob/master/ecma402/README.md)
+- [Time Formatter Web Component](https://github.com/philnash/time-formatter)
+- [Time Elements Web Component from Github](https://github.com/github/time-elements)
+- [ECMA 402](https://github.com/tc39/ecma402)
+- [@philnash on Twitter](https://twitter.com/philnash)
+
+---
+
+## Record & Tuple: immutable data structures in JS
+
+### Robin Ricard, JavaScript Infrastructure Engineer & TC39 Delegate, Bloomberg
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/robin-ricard.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+## Notes
+
+Identity-less objects and arrays
+Stage 2
+
+## Record
+
+```js
+const record = #{
+  name: 'Record & Tuple',
+  stage: 2,
+};
+
+## Tuple
+const tuple = #['Record & Tuple', 2];
+
+// nested
+
+const proposals = #[
+  #{ name: 'Record & Tuple', stage: 2 },
+  #{ name: 'Change Array by Copy', stage: 1 },
+];
+```
+
+---
+
+## Immutability
+
+No!
+
+```js
+record.name = blah; // ❌
+proposals[0].name = blah; // ❌
+```
+
+What about freeze? Nah doesn't work
+This is why tuples and records are good!
+Can't put anything mutable in.
+
+Eg no
+
+```js
+const config = #{
+  db: { this: 'asdfsadf' }, // no objects!
+};
+```
+
+---
+
+## Store functions in records
+
+`Box() and .unbox()`
+
+```js
+const config = #{
+  db: #{
+    driver: 'postgres',
+    host: 'pg0',
+    onConnect: Box(() => {
+      // ...
+    }),
+  },
+};
+config.db.onConnect.unbox()();
+```
+
+---
+
+## Object Equality!
+
+```js
+[1, 2, 3] !== [1, 2, 3]
+{ a: 1 } !== { a: 1 }
+
+#{ a: 1 } === #{ a: 1 }
+#[1, 2, 3] === #[1, 2, 3]
+```
+
+---
+
+## Can't mutate
+
+But can spread
+
+```js
+const root = #['C:'];
+const abs = #[...root, ...rel];
+```
+
+And same methods, but in past tense
+But this api subject to change
+
+eg root.pushed();
+abs.reversed();
+
+---
+
+## Proposal - change array by copy
+
+Stage 1
+
+https://github.com/tc39/proposal-change-array-by-copy
+
+```js
+const normalArray = ['one', 'two', 'three'];
+
+const newArray = normalArray.withPushed('four');
+```
+
+---
+
+## TC39 Info
+
+- Stage 0 - idea
+- Stage 1 - interested
+- Stage 2 - intend to specify
+- Stage 3 - spec complete and should land with minor changes
+- Stage 4 - implemented in major browsers and will ship in the next yearly spec
+
+---
+
+## Records and Tuples are Stage 2
+
+In Babel, Polyfill, etc
+
+---
+
+### Resources
+
+- [Record & Tuple Playground](https://rickbutton.github.io/record-tuple-playground/)
+- [@r_ricard on Twitter](https://twitter.com/r_ricard)
+- [@rricard on Github](https://github.com/rricard)
+
+---
+
+## Class features implementation in JSC
+
+### Caio Lima, Compiler developer, Igalia
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/caio-lima.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+## Notes
+
+Adding publiic and private fields and methods to JS
+
+Stage 3
+
+Prefix with `#`
+
+```js
+class C {
+  static #field;
+  static #privateMethod() {
+    this.#foo; // syntax error
+  }
+}
+
+C.#field; // syntax error
+C.#privateMethod; // syntax error
+```
+
+---
+
+## Current state of art
+
+WeakMaps and closures
+
+```js
+let C = (function () {
+	let privateFields = new WeakMap();
+	class C {
+		constructor(v) {
+			privateFields.set(this, { foo: v });
+		}
+
+		getFoo() { return privateFields.get(this);
+		}
+
+		return C;
+})();
+```
+
+---
+
+### Resources
+
+- [Proposal](https://github.com/tc39/proposal-class-fields)
+
+---
+
+## Principles of Just-In-Time compilers.
+
+### Nicolas B. Pierron, Senior Software Engineer, Mozilla
+
+<Image
+  src="https://res.cloudinary.com/zorfling/image/fetch/c_fill,g_face,h_300,w_300/f_auto/q_auto/https://webdirections.org/event-common-images/speakers/nicolas-pierron.jpg"
+  style={{
+    width: '300px',
+    height: '300px',
+  }}
+></Image>
+
+---
+
+## Notes
+
+Whoosh!
+
+---
+
+### Resources
+
+- [@nbpname on Twitter](https://twitter.com/nbpname)
+
+---
